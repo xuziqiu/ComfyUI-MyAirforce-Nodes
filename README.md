@@ -24,7 +24,7 @@ All nodes live under category **🚀Airforce/Modular**.
 2. Click **Install Custom Nodes** (or **Install from GitHub**).
 3. Paste this repo URL and install:
    ```
-   https://github.com/YOUR_USERNAME/ComfyUI-MyAirforce-Nodes
+   https://github.com/xuziqiu/ComfyUI-MyAirforce-Nodes
    ```
 4. Restart ComfyUI or refresh the node list.
 
@@ -33,7 +33,7 @@ All nodes live under category **🚀Airforce/Modular**.
 1. Clone into your ComfyUI `custom_nodes` folder:
    ```bash
    cd ComfyUI/custom_nodes
-   git clone https://github.com/YOUR_USERNAME/ComfyUI-MyAirforce-Nodes.git
+   git clone https://github.com/xuziqiu/ComfyUI-MyAirforce-Nodes.git
    ```
 2. Install dependencies:
    ```bash

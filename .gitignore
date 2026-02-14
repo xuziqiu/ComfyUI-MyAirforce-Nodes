@@ -22,3 +22,6 @@ Thumbs.db
 # Local / debug
 *.log
 *.tmp
+
+# Internal checklist (not for distribution)
+PUBLISH_CHECKLIST.md
