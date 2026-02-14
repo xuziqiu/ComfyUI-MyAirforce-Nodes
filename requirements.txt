@@ -1,0 +1,6 @@
+# ComfyUI-MyAirforce-Nodes dependencies
+# torch is provided by ComfyUI, do not add it here
+
+requests>=2.28.0
+Pillow>=9.0.0
+numpy>=1.21.0
