@@ -1,6 +1,6 @@
-# 配置与常量
+# Config and constants
 
-# 比例预设：各参数节点共用，按「横:竖」排序便于选择
+# Aspect ratio presets shared by param nodes (width:height)
 ASPECT_RATIO_PRESETS = [
     "1:1",
     "4:3", "3:4",
@@ -13,7 +13,7 @@ ASPECT_RATIO_PRESETS = [
     "16:10", "10:16",
 ]
 
-# 每个系列: models = 可选模型名列表, payload_keys = 该系列在节点中暴露的参数字段
+# Per-series: models = allowed model names, payload_keys = fields exposed in nodes
 MODEL_REGISTRY = {
     "nano": {
         "models": ["nano-banana-pro"],
@@ -25,7 +25,7 @@ MODEL_REGISTRY = {
     },
 }
 
-# Flux Pro/Flex 使用比例+分辨率；Klein/Dev 使用宽高
+# Flux Pro/Flex use ratio+resolution; Klein/Dev use width/height
 FLUX_PRO_FLEX = ("flux-2-pro", "flux-2-flex")
 
 

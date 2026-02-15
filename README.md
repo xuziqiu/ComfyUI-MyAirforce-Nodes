@@ -7,10 +7,9 @@ ComfyUI custom nodes for **Airforce** API: image and video generation with multi
 ## Features
 
 - **Config node**: Set API base URL and API key; optional AnonDrop key for reference uploads.
-- **Parameter nodes**: Per-model params (NanoBanana, Flux Pro/Flex, Flux Dev/Klein, Z-Image, Imagen, Seedream, Suno, Grok Imagine Video, Veo, Wan).
+- **Parameter nodes**: Per-model params (NanoBanana, Flux Pro/Flex, Flux Dev/Klein, Z-Image, Imagen, Seedream, Suno, Grok Imagine Video, Veo, Wan). In the node list, 🎨 = image params, 🎬 = video params.
 - **Reference upload**: Upload ComfyUI images to AnonDrop and get URLs for image/video models that support references.
-- **Image generator**: Submit with config + params + prompt → IMAGE + debug outputs.
-- **Video generator**: Same flow → video file path + debug outputs.
+- **Submit node** (one node for both): Config + params + prompt → **image** (IMAGE tensor; placeholder for video), **path** (always empty), **url**, and debug outputs. Connect **url** to **Airforce: Download** to save file; connect **url** to **Airforce Previewer** for in-node video preview. Image vs video is detected from API response.
 
 All nodes live under category **🚀Airforce/Modular**.
 
@@ -59,7 +58,11 @@ ComfyUI-MyAirforce-Nodes/
 ├── config.py         # AirforceConfig, constants, model registry
 ├── params.py         # All *Params nodes (Nano, Flux, Z-Image, Imagen, etc.)
 ├── upload.py         # AnonDrop upload node and URL parsing
-├── generator.py      # Image and video generator nodes
+├── generator.py      # Unified image/video Submit node
+├── download.py       # AirforceDownload node
+├── preview.py        # AirforceVideoPreview node (in-node video preview)
+├── web/
+│   └── airforce_preview.js  # Frontend: in-node preview widget
 ├── requirements.txt  # requests, Pillow, numpy
 ├── README.md         # This file
 └── .gitignore        # __pycache__, .cursor, etc.
@@ -73,26 +76,27 @@ ComfyUI-MyAirforce-Nodes/
 |------|-------------|
 | ⚙️ Airforce: Config | API base URL, API key, AnonDrop key/URL |
 | 📤 Reference: AnonDrop Upload | Upload images → reference URLs string |
-| 📝 NanoBanana (Image) | nano-banana-pro params |
-| 📝 Flux Pro/Flex (Image) | flux-2-pro, flux-2-flex |
-| 📝 Flux Dev/Klein (Image) | flux-2-dev, flux-2-klein-9b/4b |
-| 📝 Z-Image (Image) | z-image |
-| 📝 Imagen (Image) | imagen-3, imagen-4 |
-| 📝 Seedream (Image) | seedream-4.5 |
-| 📝 Suno (Video) | suno-v5, suno-4.5 |
-| 📝 Grok Imagine (Video) | grok-imagine-video |
-| 📝 Veo (Video) | veo-3.1-fast |
-| 📝 Wan (Video) | wan-2.6 |
-| 🎨 Airforce: Submit (Image) | Run image generation → IMAGE + debug |
-| 🎬 Airforce: Submit (Video) | Run video generation → video path + debug |
+| 🎨 NanoBanana | nano-banana-pro params (image) |
+| 🎨 Flux Pro/Flex | flux-2-pro, flux-2-flex (image) |
+| 🎨 Flux Dev/Klein | flux-2-dev, flux-2-klein-9b/4b (image) |
+| 🎨 Z-Image | z-image (image) |
+| 🎨 Imagen | imagen-3, imagen-4 (image) |
+| 🎨 Seedream | seedream-4.5 (image) |
+| 🎬 Suno | suno-v5, suno-4.5 (video) |
+| 🎬 Grok Imagine | grok-imagine-video (video) |
+| 🎬 Veo | veo-3.1-fast (video) |
+| 🎬 Wan | wan-2.6 (video) |
+| 🎯 Airforce: Submit | Run generation → **image** (tensor; real image or placeholder), **path** (always empty), **url**, debug_request, debug_response. Does not save to disk. |
+| ⬇️ Airforce: Download | Input **url** → downloads and saves as PNG or MP4. Outputs **path** to saved file. Uses ComfyUI output dir by default. |
+| 📺 Airforce Previewer | Input **url** → in-node HTML5 video preview (video URLs only). Connect Submit **url** for playback. |
 
 ---
 
 ## Usage (minimal)
 
 1. Add **Airforce: Config**, fill base URL and API key.
-2. Add one **Params** node for your model (e.g. **Flux Pro/Flex**).
-3. Add **Airforce: Submit (Image)** or **Submit (Video)**; connect config, params, and a prompt.
+2. Add one **Params** node for your model (🎨 for image, 🎬 for video).
+3. Add **Airforce: Submit**; connect config, params, and a prompt. Connect **image** to **Preview Image** to view images; connect **url** to **Airforce: Download** to save file (PNG or MP4); connect **url** to **Airforce Previewer** for in-node video preview (video only).
 4. For reference images: add **Reference: AnonDrop Upload**, connect config and images, then paste the output URLs into the Params node’s reference field (if supported).
 
 ---

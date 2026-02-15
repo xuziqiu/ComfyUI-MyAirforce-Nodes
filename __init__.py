@@ -14,7 +14,9 @@ from .params import (
     AirforceVeoParams,
     AirforceWanParams,
 )
-from .generator import AirforceGeneratorModular, AirforceVideoGeneratorModular
+from .generator import AirforceGeneratorModular
+from .download import AirforceDownload
+from .preview import AirforceVideoPreview
 
 NODE_CLASS_MAPPINGS = {
     "AirforceConfig": AirforceConfig,
@@ -30,28 +32,33 @@ NODE_CLASS_MAPPINGS = {
     "AirforceVeoParams": AirforceVeoParams,
     "AirforceWanParams": AirforceWanParams,
     "AirforceGeneratorModular": AirforceGeneratorModular,
-    "AirforceVideoGeneratorModular": AirforceVideoGeneratorModular,
+    "AirforceDownload": AirforceDownload,
+    "AirforceVideoPreview": AirforceVideoPreview,
 }
 
-# Icons: config, params, submit, upload. (Image)/(Video) in parentheses. Submit uses different icon from suite.
+# Params: 🎨 = image, 🎬 = video. Submit is generic (image/video depends on connected params).
 NODE_DISPLAY_NAME_MAPPINGS = {
     "AirforceConfig": "⚙️ Airforce: Config",
     "AirforceAnonDropUpload": "📤 Reference: AnonDrop Upload",
-    "AirforceNanoParams": "📝 NanoBanana (Image)",
-    "AirforceFluxProFlexParams": "📝 Flux Pro/Flex (Image)",
-    "AirforceFluxDevKleinParams": "📝 Flux Dev/Klein (Image)",
-    "AirforceZImageParams": "📝 Z-Image (Image)",
-    "AirforceImagenParams": "📝 Imagen (Image)",
-    "AirforceSeedreamParams": "📝 Seedream (Image)",
-    "AirforceSunoParams": "📝 Suno (Video)",
-    "AirforceGrokImagineVideoParams": "📝 Grok Imagine (Video)",
-    "AirforceVeoParams": "📝 Veo (Video)",
-    "AirforceWanParams": "📝 Wan (Video)",
-    "AirforceGeneratorModular": "🎨 Airforce: Submit (Image)",
-    "AirforceVideoGeneratorModular": "🎬 Airforce: Submit (Video)",
+    "AirforceNanoParams": "🎨 NanoBanana",
+    "AirforceFluxProFlexParams": "🎨 Flux Pro/Flex",
+    "AirforceFluxDevKleinParams": "🎨 Flux Dev/Klein",
+    "AirforceZImageParams": "🎨 Z-Image",
+    "AirforceImagenParams": "🎨 Imagen",
+    "AirforceSeedreamParams": "🎨 Seedream",
+    "AirforceSunoParams": "🎬 Suno",
+    "AirforceGrokImagineVideoParams": "🎬 Grok Imagine",
+    "AirforceVeoParams": "🎬 Veo",
+    "AirforceWanParams": "🎬 Wan",
+    "AirforceGeneratorModular": "🎯 Airforce: Submit",
+    "AirforceDownload": "⬇️ Airforce: Download",
+    "AirforceVideoPreview": "📺 Airforce Previewer",
 }
+
+WEB_DIRECTORY = "./web"
 
 __all__ = [
     "NODE_CLASS_MAPPINGS",
     "NODE_DISPLAY_NAME_MAPPINGS",
+    "WEB_DIRECTORY",
 ]

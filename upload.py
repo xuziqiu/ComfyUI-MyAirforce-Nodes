@@ -7,7 +7,7 @@ from io import BytesIO
 
 
 def parse_image_urls(text, max_count=8):
-    """从多行或逗号分隔的字符串解析参考图 URL，最多 max_count 个。"""
+    """Parse reference image URLs from newline or comma-separated string; at most max_count."""
     if not text or not str(text).strip():
         return None
     urls = []
@@ -19,7 +19,7 @@ def parse_image_urls(text, max_count=8):
 
 
 def image_tensor_to_png_bytes(tensor):
-    """ComfyUI IMAGE tensor (1,H,W,C) or (H,W,C) float 0-1 -> PNG bytes."""
+    """ComfyUI IMAGE tensor (1,H,W,C) or (H,W,C) float 0-1 to PNG bytes."""
     if tensor.dim() == 4:
         tensor = tensor[0]
     arr = tensor.cpu().numpy()
@@ -34,7 +34,7 @@ def image_tensor_to_png_bytes(tensor):
 
 
 def anondrop_extract_url(response):
-    """从 AnonDrop upload 响应中提取文件 URL。支持 JSON 或简单链接。"""
+    """Extract file URL from AnonDrop upload response (JSON or plain link)."""
     text = response.text.strip()
     try:
         data = response.json()

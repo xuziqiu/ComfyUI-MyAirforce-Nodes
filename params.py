@@ -41,7 +41,7 @@ class AirforceNanoParams:
         urls = parse_image_urls(reference_urls, max_count=8)
         if urls is not None:
             payload["image_urls"] = urls
-        return ({"payload": payload},)
+        return ({"payload": payload, },)
 
 
 FLUX_PRO_FLEX_MODELS = ["flux-2-pro", "flux-2-flex"]
@@ -81,7 +81,7 @@ class AirforceFluxProFlexParams:
         urls = parse_image_urls(reference_urls, max_count=8)
         if urls is not None:
             payload["image_urls"] = urls
-        return ({"payload": payload},)
+        return ({"payload": payload, },)
 
 
 class AirforceFluxDevKleinParams:
@@ -117,7 +117,7 @@ class AirforceFluxDevKleinParams:
         urls = parse_image_urls(reference_urls, max_count=4)
         if urls is not None:
             payload["image_urls"] = urls
-        return ({"payload": payload},)
+        return ({"payload": payload, },)
 
 
 class AirforceZImageParams:
@@ -142,7 +142,7 @@ class AirforceZImageParams:
             "size": "1024x1024",
             "response_format": "url",
             "aspectRatio": aspectRatio,
-        }},)
+        }, },)
 
 
 class AirforceImagenParams:
@@ -165,10 +165,12 @@ class AirforceImagenParams:
             "n": 1,
             "size": "1024x1024",
             "response_format": "url",
-        }},)
+        }, },)
 
 
 class AirforceSeedreamParams:
+    """Seedream image params; reference images max 14."""
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -176,6 +178,9 @@ class AirforceSeedreamParams:
                 "model": (["seedream-4.5"], {"default": "seedream-4.5"}),
                 "aspectRatio": (ASPECT_RATIO_PRESETS, {"default": "1:1"}),
                 "quality": (["high", "basic"], {"default": "high"}),
+            },
+            "optional": {
+                "reference_urls": ("STRING", {"default": "", "placeholder": "From AnonDrop Upload, one URL per line, max 14"}),
             }
         }
 
@@ -184,15 +189,19 @@ class AirforceSeedreamParams:
     FUNCTION = "pack"
     CATEGORY = "🚀Airforce/Modular"
 
-    def pack(self, model, aspectRatio, quality):
-        return ({"payload": {
+    def pack(self, model, aspectRatio, quality, reference_urls=None):
+        payload = {
             "model": model,
             "n": 1,
             "size": "1024x1024",
             "response_format": "url",
             "aspectRatio": aspectRatio,
             "quality": quality,
-        }},)
+        }
+        urls = parse_image_urls(reference_urls, max_count=14)
+        if urls is not None:
+            payload["image_urls"] = urls
+        return ({"payload": payload, },)
 
 
 class AirforceSunoParams:
@@ -225,18 +234,22 @@ class AirforceSunoParams:
         }
         if custom_mode:
             payload["style"] = (style or "").strip() or "default"
-        return ({"payload": payload},)
+        return ({"payload": payload, },)
+
+
+# Grok Imagine Video 仅支持 1:1、2:3、3:2
+GROK_ASPECT_RATIOS = ["1:1", "2:3", "3:2"]
 
 
 class AirforceGrokImagineVideoParams:
-    """Grok Imagine Video params; up to 2 reference images."""
+    """Grok Imagine Video params; aspect 1:1/2:3/3:2 only; up to 2 reference images."""
 
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
                 "model": (["grok-imagine-video"], {"default": "grok-imagine-video"}),
-                "aspectRatio": (ASPECT_RATIO_PRESETS, {"default": "2:3"}),
+                "aspectRatio": (GROK_ASPECT_RATIOS, {"default": "2:3"}),
                 "mode": (["normal", "spicy", "fun"], {"default": "spicy"}),
             },
             "optional": {
@@ -261,11 +274,11 @@ class AirforceGrokImagineVideoParams:
         urls = parse_image_urls(reference_urls, max_count=2)
         if urls is not None:
             payload["image_urls"] = urls
-        return ({"payload": payload},)
+        return ({"payload": payload, },)
 
 
 class AirforceVeoParams:
-    """veo 视频模型参数；仅 prompt，无其他控件、不支持参考图。"""
+    """Veo video params; prompt only, no other controls or reference images."""
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -286,7 +299,7 @@ class AirforceVeoParams:
             "n": 1,
             "size": "1024x1024",
             "response_format": "url",
-        }},)
+        }, },)
 
 
 class AirforceWanParams:
@@ -326,4 +339,4 @@ class AirforceWanParams:
         urls = parse_image_urls(reference_urls, max_count=1)
         if urls is not None and len(urls) > 0:
             payload["wan_image_url"] = urls[0]
-        return ({"payload": payload},)
+        return ({"payload": payload, },)
