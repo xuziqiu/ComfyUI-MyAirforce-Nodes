@@ -43,6 +43,12 @@ All nodes live under category **🚀Airforce/Modular**.
 
 ---
 
+## Example Workflows
+
+Pre-built workflows are in `example_workflows/`. In ComfyUI, go to **Workflow** → **Browse Templates** and select **ComfyUI-MyAirforce-Nodes** to load them.
+
+---
+
 ## Requirements
 
 - ComfyUI (with PyTorch).
@@ -54,8 +60,9 @@ All nodes live under category **🚀Airforce/Modular**.
 
 ```
 ComfyUI-MyAirforce-Nodes/
-├── __init__.py       # Entry: NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
-├── config.py         # AirforceConfig, constants, model registry
+├── example_workflows/   # Pre-built workflows (load via Workflow → Browse Templates)
+├── __init__.py         # Entry: NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+├── config.py           # AirforceConfig, constants, model registry
 ├── params.py         # All *Params nodes (Nano, Flux, Z-Image, Imagen, etc.)
 ├── upload.py         # AnonDrop upload node and URL parsing
 ├── generator.py      # Unified image/video Submit node
