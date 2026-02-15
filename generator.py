@@ -1,4 +1,5 @@
 import json
+import random
 import torch
 import numpy as np
 import requests
@@ -148,8 +149,14 @@ class AirforceGeneratorModular:
     FUNCTION = "generate"
     CATEGORY = "🚀Airforce/Modular"
 
+    @classmethod
+    def IS_CHANGED(cls, random_seed=True, **kwargs):
+        # When Random seed is on, return a different value each time so the node is treated as changed and cache is bypassed
+        if random_seed:
+            return random.random()
+        return "fixed"
+
     def generate(self, config, params, prompt, random_seed=True):
-        # random_seed not sent to API; connect a Random node to break cache for reruns
         img_tensor, content_url, debug_req_str, debug_res_str = _fetch_and_detect(config, params, prompt)
-        # path 不再由 Submit 写入，留空；用 Download 节点从 url 保存
+        # path is left empty; use Download node to save from url
         return (img_tensor, "", content_url or "", debug_req_str, debug_res_str)

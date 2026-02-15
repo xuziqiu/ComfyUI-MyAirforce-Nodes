@@ -15,7 +15,6 @@ class AirforceNanoParams:
         return {
             "required": {
                 "model": (nano_models, {"default": nano_models[0]}),
-                "size": (["1024x1024", "512x512", "768x1024", "1024x768"], {"default": "1024x1024"}),
                 "aspectRatio": (ASPECT_RATIO_PRESETS, {"default": "1:1"}),
                 "resolution": (["1k", "2k", "4k"], {"default": "1k"}),
             },
@@ -29,11 +28,11 @@ class AirforceNanoParams:
     FUNCTION = "pack"
     CATEGORY = "🚀Airforce/Modular"
 
-    def pack(self, model, size, aspectRatio, resolution, reference_urls=None):
+    def pack(self, model, aspectRatio, resolution, reference_urls=None):
         payload = {
             "model": model,
             "n": 1,
-            "size": size,
+            "size": "1024x1024",
             "response_format": "url",
             "aspectRatio": aspectRatio,
             "resolution": resolution
@@ -237,7 +236,7 @@ class AirforceSunoParams:
         return ({"payload": payload, },)
 
 
-# Grok Imagine Video 仅支持 1:1、2:3、3:2
+# Grok Imagine Video supports 1:1, 2:3, 3:2 only
 GROK_ASPECT_RATIOS = ["1:1", "2:3", "3:2"]
 
 

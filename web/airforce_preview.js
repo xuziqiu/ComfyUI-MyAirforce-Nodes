@@ -16,7 +16,7 @@ function applyContentSize(node, contentW, contentH, resolutionDiv) {
     node.setDirtyCanvas(true, true);
 }
 
-// 从整棵 document 里移除该节点 id 的所有预览 DOM（解决旧视频残留在别的层、不随框缩放）
+// Remove all preview DOM for this node id from the document (avoids old video left in other layers / not scaling with box)
 function removeAllPreviewDomByNodeId(nodeId) {
     const id = String(nodeId);
     document.querySelectorAll(".airforce-preview-outer[" + AF_NODE_ID_ATTR + "=\"" + id + "\"]").forEach(function (el) {
@@ -68,7 +68,7 @@ function applyVideoPreviewToNode(node, mediaUrl) {
 
     node._af_preview_url = mediaUrl;
 
-    // 先清掉可能残留在其它层的旧预览 DOM（叠在下面、不随框缩放的那层）
+    // Clear any stale preview DOM in other layers (stacked below, not scaling with box)
     removeAllPreviewDomByNodeId(nodeId);
 
     const existing = node.widgets.find(w => w.name === "af_player");

@@ -1,6 +1,6 @@
 """
-独立下载节点：从 Submit 输出的 url 下载并保存到本地。
-控件：保存目录（默认 ComfyUI output）、文件名前缀（默认 ComfyUI）。
+Download node: fetches from Submit's url and saves locally.
+Widgets: directory (default ComfyUI output), filename prefix (default ComfyUI).
 """
 import os
 import re
@@ -12,7 +12,7 @@ from PIL import Image
 
 
 def _safe_filename_prefix(prefix):
-    """只保留安全字符作为文件名前缀."""
+    """Keep only safe characters for filename prefix."""
     if not prefix or not str(prefix).strip():
         return "ComfyUI"
     s = re.sub(r'[<>:"/\\|?*]', "_", str(prefix).strip())
@@ -21,19 +21,18 @@ def _safe_filename_prefix(prefix):
 
 def download_and_save(url, directory, filename_prefix):
     """
-    从 url 下载内容，根据类型保存为图片或视频。
-    directory 为空时使用 ComfyUI 的 output 目录。
-    返回 (saved_path, error_msg)。成功时 error_msg 为 None。
+    Download from url and save as image or video. Uses ComfyUI output dir when directory is empty.
+    Returns (saved_path, error_msg). error_msg is None on success.
     """
     if not url or not str(url).strip():
-        return ("", "URL 为空")
+        return ("", "URL is empty")
 
     try:
         resp = requests.get(url, timeout=60, stream=True)
         resp.raise_for_status()
         raw_bytes = resp.content
     except Exception as e:
-        return ("", f"下载失败: {e}")
+        return ("", f"Download failed: {e}")
 
     try:
         import folder_paths
@@ -46,7 +45,7 @@ def download_and_save(url, directory, filename_prefix):
     prefix = _safe_filename_prefix(filename_prefix)
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    # 先尝试按图片解析，成功则存为 png
+    # Try image first, save as png on success
     try:
         img = Image.open(BytesIO(raw_bytes)).convert("RGB")
         out_path = os.path.join(base_dir, f"{prefix}_{stamp}.png")
@@ -55,18 +54,18 @@ def download_and_save(url, directory, filename_prefix):
     except Exception:
         pass
 
-    # 否则按视频保存为 mp4
+    # Otherwise save as mp4
     try:
         out_path = os.path.join(base_dir, f"{prefix}_{stamp}.mp4")
         with open(out_path, "wb") as f:
             f.write(raw_bytes)
         return (out_path, None)
     except Exception as e:
-        return ("", f"保存失败: {e}")
+        return ("", f"Save failed: {e}")
 
 
 class AirforceDownload:
-    """从 Submit 的 url 下载并保存：可设置保存目录与文件名前缀。默认使用 ComfyUI 的 output 目录，前缀 ComfyUI。"""
+    """Download from Submit's url and save; optional directory and filename prefix. Default: ComfyUI output dir, prefix ComfyUI."""
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -75,7 +74,7 @@ class AirforceDownload:
                 "url": ("STRING", {"default": "", "forceInput": True}),
             },
             "optional": {
-                "directory": ("STRING", {"default": "", "placeholder": "留空则使用 ComfyUI 的 output 目录"}),
+                "directory": ("STRING", {"default": "", "placeholder": "Empty = ComfyUI output directory"}),
                 "filename_prefix": ("STRING", {"default": "ComfyUI"}),
             }
         }
@@ -84,14 +83,14 @@ class AirforceDownload:
     RETURN_NAMES = ("path",)
     FUNCTION = "download"
     CATEGORY = "🚀Airforce/Modular"
-    OUTPUT_NODE = True  # 无下游节点时会执行，否则会被 ComfyUI 剪枝不跑
+    OUTPUT_NODE = True  # Run when no downstream nodes; otherwise ComfyUI may prune
 
     def download(self, url, directory="", filename_prefix="ComfyUI"):
         path_str, err = download_and_save(url, directory, filename_prefix)
-        # OUTPUT_NODE 可返回 ui 以在界面显示结果
+        # OUTPUT_NODE can return ui to show result in the UI
         ui = {}
         if path_str:
-            ui["text"] = [f"已保存: {path_str}"]
+            ui["text"] = [f"Saved: {path_str}"]
         elif err:
-            ui["text"] = [f"失败: {err}"]
+            ui["text"] = [f"Failed: {err}"]
         return {"ui": ui, "result": (path_str,)}

@@ -93,7 +93,7 @@ ComfyUI-MyAirforce-Nodes/
 | 🎬 Grok Imagine | grok-imagine-video (video) |
 | 🎬 Veo | veo-3.1-fast (video) |
 | 🎬 Wan | wan-2.6 (video) |
-| 🎯 Airforce: Submit | Run generation → **image** (tensor; real image or placeholder), **path** (always empty), **url**, debug_request, debug_response. Does not save to disk. |
+| 🎯 Airforce: Submit | Run generation → **image**, **path**, **url**, debug. Does not save to disk. With **Random seed** on, each Queue Prompt bypasses cache and re-requests (via IS_CHANGED). |
 | ⬇️ Airforce: Download | Input **url** → downloads and saves as PNG or MP4. Outputs **path** to saved file. Uses ComfyUI output dir by default. |
 | 📺 Airforce Previewer | Input **url** → in-node HTML5 video preview (video URLs only). Connect Submit **url** for playback. |
 
